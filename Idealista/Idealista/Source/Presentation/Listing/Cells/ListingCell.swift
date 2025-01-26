@@ -3,9 +3,14 @@ import UIKit
 final class ListingCell: UITableViewCell {
     private let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.backgroundColor = .lightGray
+
+        if let url = URL(string: "https://img4.idealista.com/blur/WEB_LISTING-M/0/id.pro.es.image.master/58/60/32/1273036727.webp") {
+            imageView.downloadImage(from: url)
+        }
+
         return imageView
     }()
 
