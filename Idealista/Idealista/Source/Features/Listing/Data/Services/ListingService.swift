@@ -24,7 +24,7 @@ final class ListingService: ListingServiceProtocol {
         let session = URLSession(configuration: .default, delegate: SecureURLSessionDelegate(), delegateQueue: nil)
         let (data, response) = try await session.data(for: request)
 
-        guard let httpURLResponse = response as? HTTPURLResponse else {
+        guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200 else {
             throw URLError(.badServerResponse)
         }
         
