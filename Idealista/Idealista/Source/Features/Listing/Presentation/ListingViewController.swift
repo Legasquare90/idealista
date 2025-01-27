@@ -1,6 +1,8 @@
 import UIKit
 
 final class ListingViewController: UIViewController {
+    private let viewModel = ListingViewModel()
+
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ListingCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
@@ -26,6 +28,11 @@ final class ListingViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.fetchData()
     }
 
     private func setupView() {
