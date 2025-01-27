@@ -69,6 +69,7 @@ final class ListingCell: UITableViewCell {
         stackView.layer.borderWidth = 1
         stackView.layer.borderColor = UIColor.lightGray.cgColor
         stackView.layer.cornerRadius = 8
+        stackView.clipsToBounds = true
         return stackView
     }()
 
