@@ -17,7 +17,7 @@ final class ListingCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
+        label.font = UIFont(name: Constants.Font.systemBold, size: 16)
         label.text = "Callejón Ordóñez, 3"
         return label
     }()
@@ -25,7 +25,7 @@ final class ListingCell: UITableViewCell {
     private let subtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: "HelveticaNeue", size: 16)
+        label.font = UIFont(name: Constants.Font.systemRegular, size: 16)
         label.text = "Centro, Leganés"
         return label
     }()
@@ -33,7 +33,7 @@ final class ListingCell: UITableViewCell {
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        label.font = UIFont(name: Constants.Font.systemBold, size: 20)
         label.text = "850 €/mes"
         return label
     }()
@@ -41,7 +41,7 @@ final class ListingCell: UITableViewCell {
     private let infoLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: "HelveticaNeue", size: 14)
+        label.font = UIFont(name: Constants.Font.systemRegular, size: 14)
         label.text = "65m2 | Piso | 3º"
         return label
     }()
@@ -102,5 +102,14 @@ final class ListingCell: UITableViewCell {
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             thumbnailImageView.heightAnchor.constraint(equalToConstant: 200),
         ])
+    }
+}
+
+private extension ListingCell {
+    enum Constants {
+        enum Font {
+            static let systemBold = "HelveticaNeue-Bold"
+            static let systemRegular = "HelveticaNeue"
+        }
     }
 }
