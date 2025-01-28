@@ -15,6 +15,7 @@ final class ListingViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(ListingCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
+        tableView.separatorStyle = .none
         return tableView
     }()
 
@@ -93,6 +94,7 @@ extension ListingViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         cell.configureCell(viewModel: listings[indexPath.row])
+        cell.selectionStyle = .none
         return cell
     }
 }
