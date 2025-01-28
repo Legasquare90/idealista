@@ -1,7 +1,10 @@
+import Combine
 import Foundation
 
 final class ListingViewModel {
     @Published var listings: [PropertyListingModel] = []
+
+    var cancellables = Set<AnyCancellable>()
 
     private let model: ListingModelProtocol
     private let mapper: ListingViewMapperProtocol

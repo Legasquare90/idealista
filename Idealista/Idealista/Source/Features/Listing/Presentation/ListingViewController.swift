@@ -1,7 +1,16 @@
+import Combine
 import UIKit
 
 final class ListingViewController: UIViewController {
     private let viewModel = ListingViewModel.buildDefault()
+
+    private var cancellables = Set<AnyCancellable>()
+
+    private var listings: [PropertyListingModel] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -26,6 +35,7 @@ final class ListingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupBinding()
         setupView()
         setupConstraints()
     }
@@ -65,17 +75,24 @@ final class ListingViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
         ])
     }
+
+    private func setupBinding() {
+        viewModel.$listings
+            .assign(to: \.listings, on: self)
+            .store(in: &cancellables)
+    }
 }
 
 extension ListingViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        listings.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath) as? ListingCell else {
             return UITableViewCell()
         }
+        cell.configureCell(viewModel: listings[indexPath.row])
         return cell
     }
 }

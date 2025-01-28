@@ -6,11 +6,6 @@ final class ListingCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.backgroundColor = .lightGray
-
-        if let url = URL(string: "https://img4.idealista.com/blur/WEB_LISTING-M/0/id.pro.es.image.master/58/60/32/1273036727.webp") {
-            imageView.downloadImage(from: url)
-        }
-
         return imageView
     }()
 
@@ -18,7 +13,6 @@ final class ListingCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont(name: Constants.Font.systemBold, size: 16)
-        label.text = "Callejón Ordóñez, 3"
         return label
     }()
 
@@ -26,7 +20,6 @@ final class ListingCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont(name: Constants.Font.systemRegular, size: 16)
-        label.text = "Centro, Leganés"
         return label
     }()
 
@@ -34,7 +27,6 @@ final class ListingCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont(name: Constants.Font.systemBold, size: 20)
-        label.text = "850 €/mes"
         return label
     }()
 
@@ -42,7 +34,6 @@ final class ListingCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont(name: Constants.Font.systemRegular, size: 14)
-        label.text = "65m2 | Piso | 3º"
         return label
     }()
 
@@ -102,6 +93,16 @@ final class ListingCell: UITableViewCell {
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             thumbnailImageView.heightAnchor.constraint(equalToConstant: 200),
         ])
+    }
+
+    func configureCell(viewModel: PropertyListingModel) {
+        if let url = URL(string: viewModel.thumbnail) {
+            thumbnailImageView.downloadImage(from: url)
+        }
+        titleLabel.text = viewModel.address
+        subtitleLabel.text = viewModel.location
+        priceLabel.text = viewModel.price
+        infoLabel.text = viewModel.size
     }
 }
 
