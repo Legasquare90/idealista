@@ -103,6 +103,8 @@ final class ListingCell: UITableViewCell {
         return stackView
     }()
 
+    private let tagView = TagView()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -120,6 +122,7 @@ final class ListingCell: UITableViewCell {
         [addressStackView, priceStackView, extraInfoStackView].forEach(labelsStackView.addArrangedSubview)
         [thumbnailImageView, labelsStackView].forEach(contentStackView.addArrangedSubview)
         contentView.addSubview(contentStackView)
+        contentView.addSubview(tagView)
     }
 
     private func setupConstraints() {
@@ -129,13 +132,16 @@ final class ListingCell: UITableViewCell {
         addressStackView.translatesAutoresizingMaskIntoConstraints = false
         priceStackView.translatesAutoresizingMaskIntoConstraints = false
         extraInfoStackView.translatesAutoresizingMaskIntoConstraints = false
+        tagView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 240)
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 240),
+            tagView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor, constant: 12),
+            tagView.leadingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor, constant: 12)
         ])
     }
 
@@ -155,6 +161,20 @@ final class ListingCell: UITableViewCell {
             parkingLabel.isHidden = false
         } else {
             parkingLabel.isHidden = true
+        }
+
+        if let operation = viewModel.operation {
+            switch operation {
+            case .sale:
+                tagView.setupView(backgroundColor: .purple,
+                                  title: "Venta".uppercased())
+            case .rent:
+                tagView.setupView(backgroundColor: UIColor(red: 136.0/255.0, green: 176.0/255.0, blue: 75.0/255.0, alpha: 1.0),
+                                  title: "Alquiler".uppercased())
+            }
+            tagView.isHidden = false
+        } else {
+            tagView.isHidden = true
         }
     }
 

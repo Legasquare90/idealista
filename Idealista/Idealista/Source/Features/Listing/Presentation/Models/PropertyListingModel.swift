@@ -1,4 +1,9 @@
 struct PropertyListingModel {
+    enum Operation: String {
+        case rent
+        case sale
+    }
+
     let thumbnail: String
     let address: String
     let location: String
@@ -7,5 +12,6 @@ struct PropertyListingModel {
     let rooms: String
     let extraInfo: String
     let parkingInfo: String?
+    let operation: Operation?
 }
 
