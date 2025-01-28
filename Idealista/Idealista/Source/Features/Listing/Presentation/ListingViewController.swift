@@ -1,7 +1,7 @@
 import UIKit
 
 final class ListingViewController: UIViewController {
-    private let viewModel = ListingViewModel()
+    private let viewModel = ListingViewModel.buildDefault()
 
     private let tableView: UITableView = {
         let tableView = UITableView()

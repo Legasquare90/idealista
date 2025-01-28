@@ -4,7 +4,7 @@ protocol ListingModelProtocol {
     func fetchListings() async throws -> [PropertyListingEntity]
 }
 
-final class ListingModel {
+final class ListingModel: ListingModelProtocol {
     func fetchListings() async throws -> [PropertyListingEntity] {
         do {
             let listingService = ListingService()
