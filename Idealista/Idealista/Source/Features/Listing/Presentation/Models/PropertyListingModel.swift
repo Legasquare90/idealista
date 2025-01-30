@@ -13,5 +13,6 @@ struct PropertyListingModel {
     let extraInfo: String
     let parkingInfo: String?
     let operation: Operation?
+    var isFavorite: Bool
 }
 

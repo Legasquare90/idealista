@@ -95,7 +95,16 @@ extension ListingViewController: UITableViewDataSource, UITableViewDelegate {
         }
         cell.configureCell(viewModel: listings[indexPath.row])
         cell.selectionStyle = .none
+        cell.delegate = self
         return cell
+    }
+}
+
+extension ListingViewController: ListingCellDelegate {
+    func didTapFavoriteView(in cell: ListingCell) {
+        if let index = tableView.indexPath(for: cell) {
+            listings[index.row].isFavorite.toggle()
+        }
     }
 }
 

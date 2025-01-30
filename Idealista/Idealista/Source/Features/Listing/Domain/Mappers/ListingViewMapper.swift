@@ -31,7 +31,8 @@ final class ListingViewMapper: ListingViewMapperProtocol {
                      rooms: rooms,
                      extraInfo: extraInfo,
                      parkingInfo: parkingInfo,
-                     operation: .init(rawValue: input.operation))
+                     operation: .init(rawValue: input.operation),
+                     isFavorite: false)
     }
 
     private func formatDoubleValue(_ value: Double) -> String {

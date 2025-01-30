@@ -1,6 +1,12 @@
 import UIKit
 
+protocol ListingCellDelegate: AnyObject {
+    func didTapFavoriteView(in cell: ListingCell)
+}
+
 final class ListingCell: UITableViewCell {
+    weak var delegate: ListingCellDelegate?
+
     private let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -149,8 +155,8 @@ final class ListingCell: UITableViewCell {
             thumbnailImageView.heightAnchor.constraint(equalToConstant: 240),
             tagView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor, constant: 12),
             tagView.leadingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor, constant: 12),
-            favView.centerYAnchor.constraint(equalTo: addressStackView.centerYAnchor),
-            favView.trailingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: -8)
+            favView.topAnchor.constraint(equalTo: addressStackView.topAnchor),
+            favView.trailingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: -12)
         ])
     }
 
@@ -186,7 +192,11 @@ final class ListingCell: UITableViewCell {
             tagView.isHidden = true
         }
 
-        favView.setupView(text: "Favorito\n1/2/24")
+        if viewModel.isFavorite {
+            favView.setupView(text: "Favorito\n1/2/24")
+        } else {
+            favView.setupView(text: nil)
+        }
     }
 
     private func getAttributedPriceText(_ text: String) -> NSAttributedString {
@@ -212,7 +222,7 @@ final class ListingCell: UITableViewCell {
     }
 
     @objc private func favViewTapped() {
-        print("Tapped")
+        delegate?.didTapFavoriteView(in: self)
     }
 }
 

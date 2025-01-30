@@ -19,14 +19,17 @@ final class FavView: UIView {
 
     private let stackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 4
+        stackView.axis = .horizontal
+        stackView.spacing = 6
         stackView.alignment = .center
         return stackView
     }()
 
     func setupView(text: String?) {
-        [favImageView, titleLabel].forEach(stackView.addArrangedSubview)
+        self.layer.cornerRadius = 8
+        self.backgroundColor = UIColor(red: 136.0/255.0, green: 176.0/255.0, blue: 75.0/255.0, alpha: 1.0)
+
+        [titleLabel, favImageView].forEach(stackView.addArrangedSubview)
         addSubview(stackView)
 
         if let text {
@@ -46,12 +49,12 @@ final class FavView: UIView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            favImageView.heightAnchor.constraint(equalToConstant: 20),
-            favImageView.widthAnchor.constraint(equalToConstant: 20),
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            favImageView.heightAnchor.constraint(equalToConstant: 24),
+            favImageView.widthAnchor.constraint(equalToConstant: 24),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8)
         ])
     }
 }
