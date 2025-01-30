@@ -105,6 +105,8 @@ final class ListingCell: UITableViewCell {
 
     private let tagView = TagView()
 
+    private let favView = FavView()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -116,6 +118,9 @@ final class ListingCell: UITableViewCell {
     }
 
     private func setupCell() {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(favViewTapped))
+        favView.addGestureRecognizer(gesture)
+
         [titleLabel, subtitleLabel].forEach(addressStackView.addArrangedSubview)
         [priceLabel, parkingLabel].forEach(priceStackView.addArrangedSubview)
         [sizeLabel, roomsLabel, floorLabel].forEach(extraInfoStackView.addArrangedSubview)
@@ -123,6 +128,7 @@ final class ListingCell: UITableViewCell {
         [thumbnailImageView, labelsStackView].forEach(contentStackView.addArrangedSubview)
         contentView.addSubview(contentStackView)
         contentView.addSubview(tagView)
+        contentView.addSubview(favView)
     }
 
     private func setupConstraints() {
@@ -133,6 +139,7 @@ final class ListingCell: UITableViewCell {
         priceStackView.translatesAutoresizingMaskIntoConstraints = false
         extraInfoStackView.translatesAutoresizingMaskIntoConstraints = false
         tagView.translatesAutoresizingMaskIntoConstraints = false
+        favView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
@@ -141,7 +148,9 @@ final class ListingCell: UITableViewCell {
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             thumbnailImageView.heightAnchor.constraint(equalToConstant: 240),
             tagView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor, constant: 12),
-            tagView.leadingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor, constant: 12)
+            tagView.leadingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor, constant: 12),
+            favView.centerYAnchor.constraint(equalTo: addressStackView.centerYAnchor),
+            favView.trailingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: -8)
         ])
     }
 
@@ -176,6 +185,8 @@ final class ListingCell: UITableViewCell {
         } else {
             tagView.isHidden = true
         }
+
+        favView.setupView(text: "Favorito\n1/2/24")
     }
 
     private func getAttributedPriceText(_ text: String) -> NSAttributedString {
@@ -198,6 +209,10 @@ final class ListingCell: UITableViewCell {
             sizeText.addAttribute(.font, value: font, range: superIndexRange)
         }
         return sizeText
+    }
+
+    @objc private func favViewTapped() {
+        print("Tapped")
     }
 }
 
