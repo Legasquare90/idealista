@@ -1,11 +1,11 @@
 import Foundation
 
 protocol ListingViewMapperProtocol {
-    func map(input: PropertyListingEntity) -> PropertyListingModel
+    func map(input: PropertyDataEntity) -> PropertyViewEntity
 }
 
 final class ListingViewMapper: ListingViewMapperProtocol {
-    func map(input: PropertyListingEntity) -> PropertyListingModel {
+    func map(input: PropertyDataEntity) -> PropertyViewEntity {
         let location = "\(input.neighborhood), \(input.municipality)"
         let price = formatDoubleValue(input.priceInfo.price.amount) + " \(input.priceInfo.price.currencySuffix)"
         let size = formatDoubleValue(input.size) + " m2"

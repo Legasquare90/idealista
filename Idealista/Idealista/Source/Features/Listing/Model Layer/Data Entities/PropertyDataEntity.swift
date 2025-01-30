@@ -1,11 +1,11 @@
 import Foundation
 
-struct PropertyListingEntity: Codable {
+struct PropertyDataEntity: Codable {
     let propertyCode: String
     let thumbnail: String
     let floor: String
     let price: Double
-    let priceInfo: PriceInfoListingEntity
+    let priceInfo: PriceInfoDataEntity
     let propertyType: String
     let operation: String
     let size: Double
@@ -21,12 +21,12 @@ struct PropertyListingEntity: Codable {
     let latitude: Double
     let longitude: Double
     let description: String
-    let multimedia: MultimediaListingEntity
-    let features: FeaturesListingEntity
-    let parkingSpace: ParkingSpaceListingEntity?
+    let multimedia: MultimediaDataEntity
+    let features: FeaturesDataEntity
+    let parkingSpace: ParkingSpaceDataEntity?
 }
 
-struct FeaturesListingEntity: Codable {
+struct FeaturesDataEntity: Codable {
     let hasAirConditioning: Bool
     let hasBoxRoom: Bool
     let hasSwimmingPool: Bool?
@@ -34,25 +34,25 @@ struct FeaturesListingEntity: Codable {
     let hasGarden: Bool?
 }
 
-struct MultimediaListingEntity: Codable {
-    let images: [ImageListingEntity]
+struct MultimediaDataEntity: Codable {
+    let images: [ImageDataEntity]
 }
 
-struct ImageListingEntity: Codable {
+struct ImageDataEntity: Codable {
     let url: String
     let tag: String
 }
 
-struct ParkingSpaceListingEntity: Codable {
+struct ParkingSpaceDataEntity: Codable {
     let hasParkingSpace: Bool
     let isParkingSpaceIncludedInPrice: Bool
 }
 
-struct PriceInfoListingEntity: Codable {
-    let price: PriceListingEntity
+struct PriceInfoDataEntity: Codable {
+    let price: PriceDataEntity
 }
 
-struct PriceListingEntity: Codable {
+struct PriceDataEntity: Codable {
     let amount: Double
     let currencySuffix: String
 }

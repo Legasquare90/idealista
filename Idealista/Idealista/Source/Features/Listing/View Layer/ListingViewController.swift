@@ -6,7 +6,7 @@ final class ListingViewController: UIViewController {
 
     private var cancellables = Set<AnyCancellable>()
 
-    private var listings: [PropertyListingModel] = [] {
+    private var listings: [PropertyViewEntity] = [] {
         didSet {
             tableView.reloadData()
         }

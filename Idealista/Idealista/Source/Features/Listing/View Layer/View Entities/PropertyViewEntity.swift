@@ -1,4 +1,4 @@
-struct PropertyListingModel {
+struct PropertyViewEntity {
     enum Operation: String {
         case rent
         case sale

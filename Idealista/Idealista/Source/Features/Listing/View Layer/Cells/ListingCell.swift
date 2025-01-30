@@ -160,7 +160,7 @@ final class ListingCell: UITableViewCell {
         ])
     }
 
-    func configureCell(viewModel: PropertyListingModel) {
+    func configureCell(viewModel: PropertyViewEntity) {
         if let url = URL(string: viewModel.thumbnail) {
             thumbnailImageView.downloadImage(from: url)
         }

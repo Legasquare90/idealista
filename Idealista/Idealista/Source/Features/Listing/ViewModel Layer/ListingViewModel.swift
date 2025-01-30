@@ -2,7 +2,7 @@ import Combine
 import Foundation
 
 final class ListingViewModel {
-    @Published var listings: [PropertyListingModel] = []
+    @Published var listings: [PropertyViewEntity] = []
 
     private let model: ListingModelProtocol
     private let mapper: ListingViewMapperProtocol
