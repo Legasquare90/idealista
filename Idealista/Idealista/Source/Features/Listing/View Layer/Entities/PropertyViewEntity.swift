@@ -4,6 +4,7 @@ struct PropertyViewEntity {
         case sale
     }
 
+    let propertyId: String
     let thumbnail: String
     let address: String
     let location: String

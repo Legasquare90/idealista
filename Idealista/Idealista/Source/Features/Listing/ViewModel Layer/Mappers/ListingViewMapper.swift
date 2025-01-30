@@ -23,7 +23,8 @@ final class ListingViewMapper: ListingViewMapperProtocol {
             parkingInfo = "Garaje incluido"
         }
 
-        return .init(thumbnail: input.thumbnail,
+        return .init(propertyId: input.propertyCode,
+                     thumbnail: input.thumbnail,
                      address: input.address.capitalizingFirstLetter(),
                      location: location,
                      price: price,
