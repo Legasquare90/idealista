@@ -2,6 +2,7 @@ import Foundation
 
 protocol ListingModelProtocol {
     func fetchListings(forceUpdate: Bool) async throws -> [PropertyDataEntity]
+    func fetchFavoriteIds() throws -> [String: Date]
     func saveFavoriteProperty(propertyId: String) async throws
 }
 
@@ -36,6 +37,13 @@ final class ListingModel: ListingModelProtocol {
             } catch {
                 throw error
             }
+        }
+    }
+
+    func fetchFavoriteIds() throws -> [String: Date] {
+        let properties = try localDatasource.fetchFavoriteProperties()
+        return properties.reduce(into: [String: Date]()) {
+            $0[$1.propertyCode] = $1.favoriteDate
         }
     }
 

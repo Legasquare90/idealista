@@ -2,6 +2,7 @@ import Foundation
 
 protocol ListingViewMapperProtocol {
     func map(input: PropertyDataEntity) -> PropertyViewEntity
+    func mapFavoriteOptions(input: PropertyViewEntity, favoriteIds: [String: Date]) -> PropertyViewEntity
 }
 
 final class ListingViewMapper: ListingViewMapperProtocol {
@@ -36,6 +37,15 @@ final class ListingViewMapper: ListingViewMapperProtocol {
                      isFavorite: false)
     }
 
+    func mapFavoriteOptions(input: PropertyViewEntity, favoriteIds: [String: Date]) -> PropertyViewEntity {
+        var viewElement = input
+        if let date = favoriteIds[input.propertyId] {
+            viewElement.isFavorite = true
+            viewElement.favoriteText = "Te gusta desde\n\(formatDate(date))"
+        }
+        return viewElement
+    }
+
     private func formatDoubleValue(_ value: Double) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -44,5 +54,11 @@ final class ListingViewMapper: ListingViewMapperProtocol {
         formatter.maximumFractionDigits = 2
 
         return formatter.string(from: NSNumber(value: value)) ?? String(format: "%.0f", value)
+    }
+
+    private func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yy"
+        return dateFormatter.string(from: date)
     }
 }

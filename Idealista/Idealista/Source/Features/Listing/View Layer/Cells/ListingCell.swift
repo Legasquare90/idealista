@@ -193,7 +193,7 @@ final class ListingCell: UITableViewCell {
         }
 
         if viewModel.isFavorite {
-            favView.setupView(text: "Favorito\n1/2/24")
+            favView.setupView(text: viewModel.favoriteText)
         } else {
             favView.setupView(text: nil)
         }

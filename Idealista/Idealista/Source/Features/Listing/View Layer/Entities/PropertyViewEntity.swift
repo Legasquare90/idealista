@@ -15,5 +15,6 @@ struct PropertyViewEntity {
     let parkingInfo: String?
     let operation: Operation?
     var isFavorite: Bool
+    var favoriteText: String?
 }
 
