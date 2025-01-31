@@ -44,14 +44,30 @@ extension ListingViewModel {
             }.store(in: &cancellables)
     }
 
-    func didTapFavoriteView(index: Int) {
+    private func didTapFavoriteView(index: Int) {
         Task {
             let property = listings[index]
             if property.isFavorite {
-                try model.removeFavoriteProperty(propertyId: property.propertyId)
+                model.removeFavoriteProperty(propertyId: property.propertyId) { [weak self] _ in
+                    guard let self else { return }
+                    self.updatePropertyFavoriteStatus(propertyIndex: index, isFavorite: false)
+                }
             } else {
-                try await model.saveFavoriteProperty(propertyId: property.propertyId)
+                model.saveFavoriteProperty(propertyId: property.propertyId) { [weak self] _ in
+                    guard let self else { return }
+                    self.updatePropertyFavoriteStatus(propertyIndex: index, isFavorite: true)
+                }
             }
+        }
+    }
+
+    private func updatePropertyFavoriteStatus(propertyIndex: Int, isFavorite: Bool) {
+        DispatchQueue.main.async() { [weak self] in
+            guard let self else { return }
+            var property = self.listings[propertyIndex]
+            property.isFavorite = isFavorite
+            property.favoriteText = isFavorite ? Date().createFavoriteText() : nil
+            self.listings[propertyIndex] = property
         }
     }
 }

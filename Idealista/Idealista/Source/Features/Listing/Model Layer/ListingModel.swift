@@ -3,8 +3,8 @@ import Foundation
 protocol ListingModelProtocol {
     func fetchListings(forceUpdate: Bool) async throws -> [PropertyDataEntity]
     func fetchFavoriteIds() throws -> [String: Date]
-    func saveFavoriteProperty(propertyId: String) async throws
-    func removeFavoriteProperty(propertyId: String) throws
+    func saveFavoriteProperty(propertyId: String, completion: @escaping ((Result<Void, Error>) -> Void))
+    func removeFavoriteProperty(propertyId: String, completion: ((Result<Void, Error>) -> Void))
 }
 
 final class ListingModel: ListingModelProtocol {
@@ -48,13 +48,23 @@ final class ListingModel: ListingModelProtocol {
         }
     }
 
-    func saveFavoriteProperty(propertyId: String) async throws {
-        if let propertyData = try await fetchListings(forceUpdate: false).first(where: { $0.propertyCode == propertyId }) {
-            localDatasource.saveFavoriteProperty(property: propertyData)
+    func saveFavoriteProperty(propertyId: String, completion: @escaping ((Result<Void, Error>) -> Void)) {
+        Task {
+            do {
+                if let propertyData = try await fetchListings(forceUpdate: false).first(where: { $0.propertyCode == propertyId }) {
+                    localDatasource.saveFavoriteProperty(property: propertyData) {
+                        completion($0)
+                    }
+                }
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
 
-    func removeFavoriteProperty(propertyId: String) throws {
-        try localDatasource.removeFavoriteProperty(propertyId: propertyId)
+    func removeFavoriteProperty(propertyId: String, completion: ((Result<Void, Error>) -> Void)) {
+        localDatasource.removeFavoriteProperty(propertyId: propertyId) {
+            completion($0)
+        }
     }
 }

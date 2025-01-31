@@ -1,22 +1,22 @@
 import CoreData
 
 protocol ListingLocalDatasourceProtocol {
-    func saveFavoriteProperty(property: PropertyDataEntity)
+    func saveFavoriteProperty(property: PropertyDataEntity, completion: ((Result<Void, Error>) -> Void))
     func fetchFavoriteProperties() throws -> [PropertyPersistentEntity]
-    func removeFavoriteProperty(propertyId: String) throws
+    func removeFavoriteProperty(propertyId: String, completion: ((Result<Void, Error>) -> Void))
 }
 
 final class ListingLocalDatasource: ListingLocalDatasourceProtocol {
     let context = CoreDataManager.shared.context
     
-    func saveFavoriteProperty(property: PropertyDataEntity) {
+    func saveFavoriteProperty(property: PropertyDataEntity, completion: ((Result<Void, Error>) -> Void)) {
         PropertyPersistentEntity.mapFromDataEntity(property, context: context)
 
         do {
             try context.save()
-            print("Guardado con éxito")
+            completion(.success(()))
         } catch {
-            print("Error al guardar: \(error)")
+            completion(.failure(error))
         }
     }
 
@@ -30,7 +30,7 @@ final class ListingLocalDatasource: ListingLocalDatasourceProtocol {
         }
     }
 
-    func removeFavoriteProperty(propertyId: String) throws {
+    func removeFavoriteProperty(propertyId: String, completion: ((Result<Void, Error>) -> Void)) {
         let fetchRequest = NSFetchRequest<PropertyPersistentEntity>(entityName: "Property")
         fetchRequest.predicate = NSPredicate(format: "propertyCode == %@", propertyId)
 
@@ -38,9 +38,10 @@ final class ListingLocalDatasource: ListingLocalDatasourceProtocol {
             if let property = try context.fetch(fetchRequest).first {
                 context.delete(property)
                 try context.save()
+                completion(.success(()))
             }
         } catch {
-            throw error
+            completion(.failure(error))
         }
     }
 }

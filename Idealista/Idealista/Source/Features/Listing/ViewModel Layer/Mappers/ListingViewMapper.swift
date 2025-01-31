@@ -8,8 +8,8 @@ protocol ListingViewMapperProtocol {
 final class ListingViewMapper: ListingViewMapperProtocol {
     func map(input: PropertyDataEntity) -> PropertyViewEntity {
         let location = "\(input.neighborhood), \(input.municipality)"
-        let price = formatDoubleValue(input.priceInfo.price.amount) + " \(input.priceInfo.price.currencySuffix)"
-        let size = formatDoubleValue(input.size) + " m2"
+        let price = Formatter.formatDoubleValue(input.priceInfo.price.amount) + " \(input.priceInfo.price.currencySuffix)"
+        let size = Formatter.formatDoubleValue(input.size) + " m2"
         let rooms = "\(input.rooms) hab."
 
         let exterior = input.exterior ? " exterior" : ""
@@ -41,24 +41,8 @@ final class ListingViewMapper: ListingViewMapperProtocol {
         var viewElement = input
         if let date = favoriteIds[input.propertyId] {
             viewElement.isFavorite = true
-            viewElement.favoriteText = "Te gusta desde\n\(formatDate(date))"
+            viewElement.favoriteText = date.createFavoriteText()
         }
         return viewElement
-    }
-
-    private func formatDoubleValue(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale.current
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 2
-
-        return formatter.string(from: NSNumber(value: value)) ?? String(format: "%.0f", value)
-    }
-
-    private func formatDate(_ date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yy"
-        return dateFormatter.string(from: date)
     }
 }
