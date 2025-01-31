@@ -96,6 +96,11 @@ final class CoreDataManager {
         parkingIncludedInPriceAttribute.attributeType = .booleanAttributeType
         parkingIncludedInPriceAttribute.isOptional = false
 
+        let favoriteDateAttribute = NSAttributeDescription()
+        favoriteDateAttribute.name = "favoriteDate"
+        favoriteDateAttribute.attributeType = .dateAttributeType
+        favoriteDateAttribute.isOptional = true
+
 
         entity.properties = [propertyCodeAttribute,
                              thumbnailAttribute,
@@ -110,7 +115,8 @@ final class CoreDataManager {
                              municipalityAttribute,
                              neighborhoodAttribute,
                              hasParkingSpaceAttribute,
-                             parkingIncludedInPriceAttribute]
+                             parkingIncludedInPriceAttribute,
+                             favoriteDateAttribute]
 
         model.entities = [entity]
 

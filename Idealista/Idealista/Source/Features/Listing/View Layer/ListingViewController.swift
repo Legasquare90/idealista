@@ -4,6 +4,8 @@ import UIKit
 final class ListingViewController: UIViewController {
     private let viewModel = ListingViewModel.buildDefault()
 
+    let didTapFavoriteViewSubject = PassthroughSubject<Int, Never>()
+
     private var cancellables = Set<AnyCancellable>()
 
     private var listings: [PropertyViewEntity] = [] {
@@ -78,6 +80,8 @@ final class ListingViewController: UIViewController {
     }
 
     private func setupBinding() {
+        viewModel.bindToViewController(self)
+
         viewModel.$listings
             .assign(to: \.listings, on: self)
             .store(in: &cancellables)
@@ -103,7 +107,7 @@ extension ListingViewController: UITableViewDataSource, UITableViewDelegate {
 extension ListingViewController: ListingCellDelegate {
     func didTapFavoriteView(in cell: ListingCell) {
         if let index = tableView.indexPath(for: cell) {
-            listings[index.row].isFavorite.toggle()
+            didTapFavoriteViewSubject.send(index.row)
         }
     }
 }

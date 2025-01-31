@@ -8,7 +8,7 @@ final class ListingLocalDatasource: ListingLocalDatasourceProtocol {
     let context = CoreDataManager.shared.context
     
     func saveFavoriteProperty(property: PropertyDataEntity) {
-        let persistentEntity = PropertyPersistentEntity.mapFromDataEntity(property, context: context)
+        PropertyPersistentEntity.mapFromDataEntity(property, context: context)
 
         do {
             try context.save()

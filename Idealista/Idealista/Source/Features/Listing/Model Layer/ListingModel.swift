@@ -2,6 +2,7 @@ import Foundation
 
 protocol ListingModelProtocol {
     func fetchListings(forceUpdate: Bool) async throws -> [PropertyDataEntity]
+    func saveFavoriteProperty(propertyId: String) async throws
 }
 
 final class ListingModel: ListingModelProtocol {

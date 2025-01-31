@@ -16,9 +16,11 @@ final class PropertyPersistentEntity: NSManagedObject {
     @NSManaged var neighborhood: String
     @NSManaged var hasParkingSpace: Bool
     @NSManaged var isParkingSpaceIncludedInPrice: Bool
+    @NSManaged var favoriteDate: Date?
 }
 
 extension PropertyPersistentEntity {
+    @discardableResult
     static func mapFromDataEntity(_ dataEntity: PropertyDataEntity, context: NSManagedObjectContext) -> PropertyPersistentEntity {
         let persistentEntity = PropertyPersistentEntity(context: context)
         persistentEntity.propertyCode = dataEntity.propertyCode
@@ -35,6 +37,7 @@ extension PropertyPersistentEntity {
         persistentEntity.neighborhood = dataEntity.neighborhood
         persistentEntity.hasParkingSpace = dataEntity.parkingSpace?.hasParkingSpace ?? false
         persistentEntity.isParkingSpaceIncludedInPrice = dataEntity.parkingSpace?.isParkingSpaceIncludedInPrice ?? false
+        persistentEntity.favoriteDate = Date()
         return persistentEntity
     }
 
