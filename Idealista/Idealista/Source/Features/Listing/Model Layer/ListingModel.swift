@@ -11,20 +11,20 @@ final class ListingModel: ListingModelProtocol {
     private let cacheKey = "listingModelApiResponse"
 
     private let service: ListingServiceProtocol
-    private let localDatasource: ListingLocalDatasourceProtocol
+    private let store: ListingStoreProtocol
     private let cacheManager: CacheManager
 
     init(service: ListingServiceProtocol,
-         localDatasource: ListingLocalDatasourceProtocol,
+         store: ListingStoreProtocol,
          cacheManager: CacheManager) {
         self.service = service
-        self.localDatasource = localDatasource
+        self.store = store
         self.cacheManager = cacheManager
     }
 
     static func buildDefault() -> Self {
         return .init(service: ListingService(),
-                     localDatasource: ListingLocalDatasource(),
+                     store: ListingStore(),
                      cacheManager: CacheManager.shared)
     }
 
@@ -42,7 +42,7 @@ final class ListingModel: ListingModelProtocol {
     }
 
     func fetchFavoriteIds() throws -> [String: Date] {
-        let properties = try localDatasource.fetchFavoriteProperties()
+        let properties = try store.fetchFavoriteProperties()
         return properties.reduce(into: [String: Date]()) {
             $0[$1.propertyCode] = $1.favoriteDate
         }
@@ -52,7 +52,7 @@ final class ListingModel: ListingModelProtocol {
         Task {
             do {
                 if let propertyData = try await fetchListings(forceUpdate: false).first(where: { $0.propertyCode == propertyId }) {
-                    localDatasource.saveFavoriteProperty(property: propertyData) {
+                    store.saveFavoriteProperty(property: propertyData) {
                         completion($0)
                     }
                 }
@@ -63,7 +63,7 @@ final class ListingModel: ListingModelProtocol {
     }
 
     func removeFavoriteProperty(propertyId: String, completion: ((Result<Void, Error>) -> Void)) {
-        localDatasource.removeFavoriteProperty(propertyId: propertyId) {
+        store.removeFavoriteProperty(propertyId: propertyId) {
             completion($0)
         }
     }

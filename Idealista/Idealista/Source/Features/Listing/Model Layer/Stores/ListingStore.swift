@@ -1,12 +1,12 @@
 import CoreData
 
-protocol ListingLocalDatasourceProtocol {
+protocol ListingStoreProtocol {
     func saveFavoriteProperty(property: PropertyDataEntity, completion: ((Result<Void, Error>) -> Void))
     func fetchFavoriteProperties() throws -> [PropertyPersistentEntity]
     func removeFavoriteProperty(propertyId: String, completion: ((Result<Void, Error>) -> Void))
 }
 
-final class ListingLocalDatasource: ListingLocalDatasourceProtocol {
+final class ListingStore: ListingStoreProtocol {
     private let context = CoreDataManager.shared.context
 
     func saveFavoriteProperty(property: PropertyDataEntity, completion: ((Result<Void, Error>) -> Void)) {
