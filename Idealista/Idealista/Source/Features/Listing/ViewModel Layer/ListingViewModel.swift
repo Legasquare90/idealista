@@ -22,7 +22,7 @@ final class ListingViewModel {
     func fetchData() {
         Task {
             do {
-                let data = try await model.fetchListings()
+                let data = try await model.fetchListings(forceUpdate: true)
                 listings = data.map(mapper.map)
             } catch {
                 print(error.localizedDescription)
