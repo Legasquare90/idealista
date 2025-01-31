@@ -1,9 +1,10 @@
-struct PropertyListingModel {
+struct PropertyViewEntity {
     enum Operation: String {
         case rent
         case sale
     }
 
+    let propertyId: String
     let thumbnail: String
     let address: String
     let location: String
@@ -13,5 +14,7 @@ struct PropertyListingModel {
     let extraInfo: String
     let parkingInfo: String?
     let operation: Operation?
+    var isFavorite: Bool
+    var favoriteText: String?
 }
 

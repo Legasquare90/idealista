@@ -1,14 +1,14 @@
 import Foundation
 
 protocol ListingViewMapperProtocol {
-    func map(input: PropertyListingEntity) -> PropertyListingModel
+    func map(input: PropertyDataEntity, favoriteIds: [String: Date]) -> PropertyViewEntity
 }
 
 final class ListingViewMapper: ListingViewMapperProtocol {
-    func map(input: PropertyListingEntity) -> PropertyListingModel {
+    func map(input: PropertyDataEntity, favoriteIds: [String: Date]) -> PropertyViewEntity {
         let location = "\(input.neighborhood), \(input.municipality)"
-        let price = formatDoubleValue(input.priceInfo.price.amount) + " \(input.priceInfo.price.currencySuffix)"
-        let size = formatDoubleValue(input.size) + " m2"
+        let price = Formatter.formatDoubleValue(input.priceInfo.price.amount) + " \(input.priceInfo.price.currencySuffix)"
+        let size = Formatter.formatDoubleValue(input.size) + " m2"
         let rooms = "\(input.rooms) hab."
 
         let exterior = input.exterior ? " exterior" : ""
@@ -23,7 +23,15 @@ final class ListingViewMapper: ListingViewMapperProtocol {
             parkingInfo = "Garaje incluido"
         }
 
-        return .init(thumbnail: input.thumbnail,
+        var isFavorite: Bool = false
+        var favoriteText: String?
+        if let date = favoriteIds[input.propertyCode] {
+            isFavorite = true
+            favoriteText = date.createFavoriteText()
+        }
+
+        return .init(propertyId: input.propertyCode,
+                     thumbnail: input.thumbnail,
                      address: input.address.capitalizingFirstLetter(),
                      location: location,
                      price: price,
@@ -31,16 +39,8 @@ final class ListingViewMapper: ListingViewMapperProtocol {
                      rooms: rooms,
                      extraInfo: extraInfo,
                      parkingInfo: parkingInfo,
-                     operation: .init(rawValue: input.operation))
-    }
-
-    private func formatDoubleValue(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale.current
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 2
-
-        return formatter.string(from: NSNumber(value: value)) ?? String(format: "%.0f", value)
+                     operation: .init(rawValue: input.operation),
+                     isFavorite: isFavorite,
+                     favoriteText: favoriteText)
     }
 }
