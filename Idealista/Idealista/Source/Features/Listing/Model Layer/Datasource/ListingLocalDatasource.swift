@@ -3,6 +3,7 @@ import CoreData
 protocol ListingLocalDatasourceProtocol {
     func saveFavoriteProperty(property: PropertyDataEntity)
     func fetchFavoriteProperties() throws -> [PropertyPersistentEntity]
+    func removeFavoriteProperty(propertyId: String) throws
 }
 
 final class ListingLocalDatasource: ListingLocalDatasourceProtocol {
@@ -24,6 +25,20 @@ final class ListingLocalDatasource: ListingLocalDatasourceProtocol {
 
         do {
             return try context.fetch(fetchRequest)
+        } catch {
+            throw error
+        }
+    }
+
+    func removeFavoriteProperty(propertyId: String) throws {
+        let fetchRequest = NSFetchRequest<PropertyPersistentEntity>(entityName: "Property")
+        fetchRequest.predicate = NSPredicate(format: "propertyCode == %@", propertyId)
+
+        do {
+            if let property = try context.fetch(fetchRequest).first {
+                context.delete(property)
+                try context.save()
+            }
         } catch {
             throw error
         }

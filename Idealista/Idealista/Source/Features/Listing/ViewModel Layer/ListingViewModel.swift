@@ -46,7 +46,12 @@ extension ListingViewModel {
 
     func didTapFavoriteView(index: Int) {
         Task {
-            try await model.saveFavoriteProperty(propertyId: listings[index].propertyId)
+            let property = listings[index]
+            if property.isFavorite {
+                try model.removeFavoriteProperty(propertyId: property.propertyId)
+            } else {
+                try await model.saveFavoriteProperty(propertyId: property.propertyId)
+            }
         }
     }
 }

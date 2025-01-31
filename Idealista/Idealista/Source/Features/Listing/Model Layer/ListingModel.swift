@@ -4,6 +4,7 @@ protocol ListingModelProtocol {
     func fetchListings(forceUpdate: Bool) async throws -> [PropertyDataEntity]
     func fetchFavoriteIds() throws -> [String: Date]
     func saveFavoriteProperty(propertyId: String) async throws
+    func removeFavoriteProperty(propertyId: String) throws
 }
 
 final class ListingModel: ListingModelProtocol {
@@ -51,5 +52,9 @@ final class ListingModel: ListingModelProtocol {
         if let propertyData = try await fetchListings(forceUpdate: false).first(where: { $0.propertyCode == propertyId }) {
             localDatasource.saveFavoriteProperty(property: propertyData)
         }
+    }
+
+    func removeFavoriteProperty(propertyId: String) throws {
+        try localDatasource.removeFavoriteProperty(propertyId: propertyId)
     }
 }
