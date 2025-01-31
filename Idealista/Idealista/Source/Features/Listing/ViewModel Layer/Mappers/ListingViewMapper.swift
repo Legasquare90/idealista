@@ -1,12 +1,11 @@
 import Foundation
 
 protocol ListingViewMapperProtocol {
-    func map(input: PropertyDataEntity) -> PropertyViewEntity
-    func mapFavoriteOptions(input: PropertyViewEntity, favoriteIds: [String: Date]) -> PropertyViewEntity
+    func map(input: PropertyDataEntity, favoriteIds: [String: Date]) -> PropertyViewEntity
 }
 
 final class ListingViewMapper: ListingViewMapperProtocol {
-    func map(input: PropertyDataEntity) -> PropertyViewEntity {
+    func map(input: PropertyDataEntity, favoriteIds: [String: Date]) -> PropertyViewEntity {
         let location = "\(input.neighborhood), \(input.municipality)"
         let price = Formatter.formatDoubleValue(input.priceInfo.price.amount) + " \(input.priceInfo.price.currencySuffix)"
         let size = Formatter.formatDoubleValue(input.size) + " m2"
@@ -24,6 +23,13 @@ final class ListingViewMapper: ListingViewMapperProtocol {
             parkingInfo = "Garaje incluido"
         }
 
+        var isFavorite: Bool = false
+        var favoriteText: String?
+        if let date = favoriteIds[input.propertyCode] {
+            isFavorite = true
+            favoriteText = date.createFavoriteText()
+        }
+
         return .init(propertyId: input.propertyCode,
                      thumbnail: input.thumbnail,
                      address: input.address.capitalizingFirstLetter(),
@@ -34,15 +40,7 @@ final class ListingViewMapper: ListingViewMapperProtocol {
                      extraInfo: extraInfo,
                      parkingInfo: parkingInfo,
                      operation: .init(rawValue: input.operation),
-                     isFavorite: false)
-    }
-
-    func mapFavoriteOptions(input: PropertyViewEntity, favoriteIds: [String: Date]) -> PropertyViewEntity {
-        var viewElement = input
-        if let date = favoriteIds[input.propertyId] {
-            viewElement.isFavorite = true
-            viewElement.favoriteText = date.createFavoriteText()
-        }
-        return viewElement
+                     isFavorite: isFavorite,
+                     favoriteText: favoriteText)
     }
 }

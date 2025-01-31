@@ -7,8 +7,8 @@ protocol ListingLocalDatasourceProtocol {
 }
 
 final class ListingLocalDatasource: ListingLocalDatasourceProtocol {
-    let context = CoreDataManager.shared.context
-    
+    private let context = CoreDataManager.shared.context
+
     func saveFavoriteProperty(property: PropertyDataEntity, completion: ((Result<Void, Error>) -> Void)) {
         PropertyPersistentEntity.mapFromDataEntity(property, context: context)
 

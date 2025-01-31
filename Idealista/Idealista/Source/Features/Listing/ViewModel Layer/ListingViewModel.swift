@@ -25,9 +25,8 @@ final class ListingViewModel {
         Task {
             do {
                 let data = try await model.fetchListings(forceUpdate: true)
-                let viewListings = data.map(mapper.map)
                 let favoritePropertyIds = try model.fetchFavoriteIds()
-                self.listings = viewListings.map { mapper.mapFavoriteOptions(input: $0, favoriteIds: favoritePropertyIds) }
+                self.listings = data.map { mapper.map(input: $0, favoriteIds: favoritePropertyIds) }
             } catch {
                 print(error.localizedDescription)
             }
