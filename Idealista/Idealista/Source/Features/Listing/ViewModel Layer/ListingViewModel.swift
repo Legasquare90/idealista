@@ -14,7 +14,7 @@ final class ListingViewModel {
     }
 
     static func buildDefault() -> Self {
-        .init(model: ListingModel(),
+        .init(model: ListingModel.buildDefault(),
               mapper: ListingViewMapper())
     }
 

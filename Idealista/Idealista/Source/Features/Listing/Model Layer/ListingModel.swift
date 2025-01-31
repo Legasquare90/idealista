@@ -8,16 +8,20 @@ final class ListingModel: ListingModelProtocol {
     private let cacheKey = "listingModelApiResponse"
 
     private let service: ListingServiceProtocol
+    private let localDatasource: ListingLocalDatasourceProtocol
     private let cacheManager: CacheManager
 
     init(service: ListingServiceProtocol,
+         localDatasource: ListingLocalDatasourceProtocol,
          cacheManager: CacheManager) {
         self.service = service
+        self.localDatasource = localDatasource
         self.cacheManager = cacheManager
     }
 
     static func buildDefault() -> Self {
         return .init(service: ListingService(),
+                     localDatasource: ListingLocalDatasource(),
                      cacheManager: CacheManager.shared)
     }
 
@@ -31,6 +35,12 @@ final class ListingModel: ListingModelProtocol {
             } catch {
                 throw error
             }
+        }
+    }
+
+    func saveFavoriteProperty(propertyId: String) async throws {
+        if let propertyData = try await fetchListings(forceUpdate: false).first(where: { $0.propertyCode == propertyId }) {
+            localDatasource.saveFavoriteProperty(property: propertyData)
         }
     }
 }
