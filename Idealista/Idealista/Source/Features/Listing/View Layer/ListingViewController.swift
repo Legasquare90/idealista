@@ -28,24 +28,16 @@ final class ListingViewController: UIViewController {
         return segmentedControl
     }()
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemBold, size: 18)
-        label.text = "Idealista"
-        label.textAlignment = .center
-        return label
-    }()
-
-    private let header: UIView = {
+    private let segmentedControlView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 136.0/255.0, green: 176.0/255.0, blue: 75.0/255.0, alpha: 1.0)
+        view.backgroundColor = .white
         return view
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBinding()
+        setNavigationController()
         setupView()
         setupConstraints()
     }
@@ -55,6 +47,15 @@ final class ListingViewController: UIViewController {
         viewModel.fetchData(segmentedControlIndex: segmentedControl.selectedSegmentIndex)
     }
 
+    private func setNavigationController() {
+        self.title = "Idealista"
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.backgroundColor = UIColor(red: 136.0/255.0,
+                                                                      green: 176.0/255.0,
+                                                                      blue: 75.0/255.0,
+                                                                      alpha: 1.0)
+    }
+
     private func setupView() {
         tableView.frame = view.bounds
         tableView.dataSource = self
@@ -62,35 +63,34 @@ final class ListingViewController: UIViewController {
 
         segmentedControl.addTarget(self, action: #selector(updateSegmentedControl), for: .valueChanged)
 
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: 136.0/255.0,
+                                       green: 176.0/255.0,
+                                       blue: 75.0/255.0,
+                                       alpha: 1.0)
 
-        header.addSubview(titleLabel)
-        [header, segmentedControl, tableView].forEach(view.addSubview)
+        segmentedControlView.addSubview(segmentedControl)
+        [segmentedControlView, tableView].forEach(view.addSubview)
     }
 
     private func setupConstraints() {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        header.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControlView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: header.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: header.topAnchor, constant: 16),
-            titleLabel.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
+            segmentedControlView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            segmentedControlView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            segmentedControlView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            segmentedControlView.bottomAnchor.constraint(equalTo: tableView.topAnchor),
 
-            header.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            header.bottomAnchor.constraint(equalTo: segmentedControl.topAnchor, constant: -8),
-
-            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            segmentedControl.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -8),
+            segmentedControl.topAnchor.constraint(equalTo: segmentedControlView.topAnchor, constant: 8),
+            segmentedControl.leadingAnchor.constraint(equalTo: segmentedControlView.leadingAnchor, constant: 16),
+            segmentedControl.trailingAnchor.constraint(equalTo: segmentedControlView.trailingAnchor, constant: -16),
+            segmentedControl.bottomAnchor.constraint(equalTo: segmentedControlView.bottomAnchor, constant: -8),
 
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
