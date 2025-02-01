@@ -2,12 +2,19 @@ import Combine
 import Foundation
 
 final class ListingViewModel {
+    private enum Controls: Int {
+        case all
+        case favorite
+    }
+
     @Published var listings: [PropertyViewEntity] = []
 
     var cancellables = Set<AnyCancellable>()
 
     private let model: ListingModelProtocol
     private let mapper: ListingViewMapperProtocol
+
+    private var controlSelected: Controls?
 
     init(model: ListingModelProtocol,
          mapper: ListingViewMapperProtocol) {
@@ -21,7 +28,21 @@ final class ListingViewModel {
     }
 
     @MainActor
-    func fetchData() {
+    func fetchData(segmentedControlIndex: Int) {
+        guard let control = Controls(rawValue: segmentedControlIndex) else { return }
+
+        controlSelected = control
+
+        switch control {
+        case .all:
+            fetchAllData()
+        case .favorite:
+            fetchFavoriteData()
+        }
+    }
+
+    @MainActor
+    private func fetchAllData() {
         Task {
             do {
                 let data = try await model.fetchListings(forceUpdate: true)
@@ -30,6 +51,16 @@ final class ListingViewModel {
             } catch {
                 print(error.localizedDescription)
             }
+        }
+    }
+
+    @MainActor
+    private func fetchFavoriteData() {
+        do {
+            let (properties, dates) = try model.fetchFavoriteProperties()
+            self.listings = properties.map { mapper.map(input: $0, favoriteIds: dates) }
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
@@ -44,12 +75,16 @@ extension ListingViewModel {
     }
 
     private func didTapFavoriteView(index: Int) {
-        Task {
+        Task { @MainActor in
             let property = listings[index]
             if property.isFavorite {
                 model.removeFavoriteProperty(propertyId: property.propertyId) { [weak self] _ in
                     guard let self else { return }
-                    self.updatePropertyFavoriteStatus(propertyIndex: index, isFavorite: false)
+                    if let controlSelected, controlSelected == .favorite {
+                        self.fetchData(segmentedControlIndex: controlSelected.rawValue)
+                    } else {
+                        self.updatePropertyFavoriteStatus(propertyIndex: index, isFavorite: false)
+                    }
                 }
             } else {
                 model.saveFavoriteProperty(propertyId: property.propertyId) { [weak self] _ in

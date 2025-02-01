@@ -2,6 +2,7 @@ import Foundation
 
 protocol ListingModelProtocol {
     func fetchListings(forceUpdate: Bool) async throws -> [PropertyDataEntity]
+    func fetchFavoriteProperties() throws -> ([PropertyDataEntity], [String: Date])
     func fetchFavoriteIds() throws -> [String: Date]
     func saveFavoriteProperty(propertyId: String, completion: @escaping ((Result<Void, Error>) -> Void))
     func removeFavoriteProperty(propertyId: String, completion: ((Result<Void, Error>) -> Void))
@@ -39,6 +40,15 @@ final class ListingModel: ListingModelProtocol {
                 throw error
             }
         }
+    }
+
+    func fetchFavoriteProperties() throws -> ([PropertyDataEntity], [String: Date]) {
+        let properties = try store.fetchFavoriteProperties()
+        let favoriteDates = properties.reduce(into: [String: Date]()) {
+            $0[$1.propertyCode] = $1.favoriteDate
+        }
+        let propertiesMapped = properties.map { $0.mapToDataEntity() }
+        return (propertiesMapped, favoriteDates)
     }
 
     func fetchFavoriteIds() throws -> [String: Date] {
