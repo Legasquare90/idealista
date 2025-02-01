@@ -11,6 +11,7 @@ final class ListingViewController: UIViewController {
     private var listings: [PropertyViewEntity] = [] {
         didSet {
             tableView.reloadData()
+            updateEmptyView()
         }
     }
 
@@ -55,6 +56,7 @@ final class ListingViewController: UIViewController {
     }
 
     private func setupView() {
+        tableView.frame = view.bounds
         tableView.dataSource = self
         tableView.delegate = self
 
@@ -118,6 +120,17 @@ extension ListingViewController: UITableViewDataSource, UITableViewDelegate {
         cell.selectionStyle = .none
         cell.delegate = self
         return cell
+    }
+
+    private func updateEmptyView() {
+        if listings.count == 0 {
+            let emptyView = EmptyView()
+            emptyView.setupView(title: "No tienes ninguna propiedad guardada",
+                                subtitle: "¡Márcalas como favoritas para que no se te escapen!")
+            tableView.backgroundView = emptyView
+        } else {
+            tableView.backgroundView = nil
+        }
     }
 }
 
