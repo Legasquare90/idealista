@@ -14,6 +14,8 @@ final class ListingViewModel {
     private let model: ListingModelProtocol
     private let mapper: ListingViewMapperProtocol
 
+    private var controlSelected: Controls?
+
     init(model: ListingModelProtocol,
          mapper: ListingViewMapperProtocol) {
         self.model = model
@@ -28,6 +30,8 @@ final class ListingViewModel {
     @MainActor
     func fetchData(segmentedControlIndex: Int) {
         guard let control = Controls(rawValue: segmentedControlIndex) else { return }
+
+        controlSelected = control
 
         switch control {
         case .all:
@@ -71,12 +75,16 @@ extension ListingViewModel {
     }
 
     private func didTapFavoriteView(index: Int) {
-        Task {
+        Task { @MainActor in
             let property = listings[index]
             if property.isFavorite {
                 model.removeFavoriteProperty(propertyId: property.propertyId) { [weak self] _ in
                     guard let self else { return }
-                    self.updatePropertyFavoriteStatus(propertyIndex: index, isFavorite: false)
+                    if let controlSelected, controlSelected == .favorite {
+                        self.fetchData(segmentedControlIndex: controlSelected.rawValue)
+                    } else {
+                        self.updatePropertyFavoriteStatus(propertyIndex: index, isFavorite: false)
+                    }
                 }
             } else {
                 model.saveFavoriteProperty(propertyId: property.propertyId) { [weak self] _ in
