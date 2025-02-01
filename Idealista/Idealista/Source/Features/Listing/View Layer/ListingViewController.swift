@@ -21,6 +21,12 @@ final class ListingViewController: UIViewController {
         return tableView
     }()
 
+    private let segmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["Todos", "Favoritos"])
+        segmentedControl.selectedSegmentIndex = 0
+        return segmentedControl
+    }()
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
@@ -45,23 +51,26 @@ final class ListingViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.fetchData()
+        viewModel.fetchData(segmentedControlIndex: segmentedControl.selectedSegmentIndex)
     }
 
     private func setupView() {
         tableView.dataSource = self
         tableView.delegate = self
 
+        segmentedControl.addTarget(self, action: #selector(updateSegmentedControl), for: .valueChanged)
+
         view.backgroundColor = .white
 
         header.addSubview(titleLabel)
-        [header, tableView].forEach(view.addSubview)
+        [header, segmentedControl, tableView].forEach(view.addSubview)
     }
 
     private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         header.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: header.centerXAnchor),
@@ -71,7 +80,11 @@ final class ListingViewController: UIViewController {
             header.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            header.bottomAnchor.constraint(equalTo: tableView.topAnchor),
+            header.bottomAnchor.constraint(equalTo: segmentedControl.topAnchor, constant: -8),
+
+            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            segmentedControl.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -8),
 
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -85,6 +98,10 @@ final class ListingViewController: UIViewController {
         viewModel.$listings
             .assign(to: \.listings, on: self)
             .store(in: &cancellables)
+    }
+
+    @objc private func updateSegmentedControl() {
+        viewModel.fetchData(segmentedControlIndex: segmentedControl.selectedSegmentIndex)
     }
 }
 

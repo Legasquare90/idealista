@@ -2,6 +2,11 @@ import Combine
 import Foundation
 
 final class ListingViewModel {
+    private enum Controls: Int {
+        case all
+        case favorite
+    }
+
     @Published var listings: [PropertyViewEntity] = []
 
     var cancellables = Set<AnyCancellable>()
@@ -21,7 +26,19 @@ final class ListingViewModel {
     }
 
     @MainActor
-    func fetchData() {
+    func fetchData(segmentedControlIndex: Int) {
+        guard let control = Controls(rawValue: segmentedControlIndex) else { return }
+
+        switch control {
+        case .all:
+            fetchAllData()
+        case .favorite:
+            fetchFavoriteData()
+        }
+    }
+
+    @MainActor
+    private func fetchAllData() {
         Task {
             do {
                 let data = try await model.fetchListings(forceUpdate: true)
@@ -30,6 +47,16 @@ final class ListingViewModel {
             } catch {
                 print(error.localizedDescription)
             }
+        }
+    }
+
+    @MainActor
+    private func fetchFavoriteData() {
+        do {
+            let (properties, dates) = try model.fetchFavoriteProperties()
+            self.listings = properties.map { mapper.map(input: $0, favoriteIds: dates) }
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
