@@ -18,21 +18,21 @@ final class ListingCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemBold, size: 16)
+        label.font = UIFont(name: UI.Font.systemBold, size: 16)
         return label
     }()
 
     private let subtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemRegular, size: 16)
+        label.font = UIFont(name: UI.Font.systemRegular, size: 16)
         return label
     }()
 
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemBold, size: 20)
+        label.font = UIFont(name: UI.Font.systemBold, size: 20)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
@@ -40,14 +40,14 @@ final class ListingCell: UITableViewCell {
     private let parkingLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemRegular, size: 14)
+        label.font = UIFont(name: UI.Font.systemRegular, size: 14)
         return label
     }()
 
     private let sizeLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemRegular, size: 14)
+        label.font = UIFont(name: UI.Font.systemRegular, size: 14)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
@@ -55,7 +55,7 @@ final class ListingCell: UITableViewCell {
     private let roomsLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemRegular, size: 14)
+        label.font = UIFont(name: UI.Font.systemRegular, size: 14)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
@@ -63,7 +63,7 @@ final class ListingCell: UITableViewCell {
     private let floorLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemRegular, size: 14)
+        label.font = UIFont(name: UI.Font.systemRegular, size: 14)
         return label
     }()
 
@@ -182,9 +182,11 @@ final class ListingCell: UITableViewCell {
             switch operation {
             case .sale:
                 tagView.setupView(backgroundColor: .purple,
+                                  textColor: .white,
                                   title: "Venta".uppercased())
             case .rent:
-                tagView.setupView(backgroundColor: UIColor(red: 136.0/255.0, green: 176.0/255.0, blue: 75.0/255.0, alpha: 1.0),
+                tagView.setupView(backgroundColor: .systemYellow,
+                                  textColor: .black,
                                   title: "Alquiler".uppercased())
             }
             tagView.isHidden = false
@@ -205,7 +207,7 @@ final class ListingCell: UITableViewCell {
         var currencyRange = (text as NSString).range(of: String(currencyText))
         currencyRange.location -= 1
         currencyRange.length += 1
-        if let font = UIFont(name: Constants.Font.systemBold, size: 14) {
+        if let font = UIFont(name: UI.Font.systemBold, size: 14) {
             sizeText.addAttribute(.font, value: font, range: currencyRange)
         }
         return sizeText
@@ -215,7 +217,7 @@ final class ListingCell: UITableViewCell {
         let sizeText = NSMutableAttributedString(string: text)
         let superIndexRange = NSRange(location: text.count - 1, length: 1)
         sizeText.addAttribute(.baselineOffset, value: 4, range: superIndexRange)
-        if let font = UIFont(name: Constants.Font.systemRegular, size: 10) {
+        if let font = UIFont(name: UI.Font.systemRegular, size: 10) {
             sizeText.addAttribute(.font, value: font, range: superIndexRange)
         }
         return sizeText
@@ -223,14 +225,5 @@ final class ListingCell: UITableViewCell {
 
     @objc private func favViewTapped() {
         delegate?.didTapFavoriteView(in: self)
-    }
-}
-
-private extension ListingCell {
-    enum Constants {
-        enum Font {
-            static let systemBold = "HelveticaNeue-Bold"
-            static let systemRegular = "HelveticaNeue"
-        }
     }
 }

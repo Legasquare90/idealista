@@ -4,7 +4,7 @@ final class EmptyView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemBold, size: 18)
+        label.font = UIFont(name: UI.Font.systemBold, size: 18)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -13,7 +13,7 @@ final class EmptyView: UIView {
     private let subtitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemRegular, size: 16)
+        label.font = UIFont(name: UI.Font.systemRegular, size: 16)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -40,14 +40,5 @@ final class EmptyView: UIView {
             subtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             subtitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
-    }
-}
-
-private extension EmptyView {
-    enum Constants {
-        enum Font {
-            static let systemBold = "HelveticaNeue-Bold"
-            static let systemRegular = "HelveticaNeue"
-        }
     }
 }

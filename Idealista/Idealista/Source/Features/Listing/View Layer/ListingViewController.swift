@@ -37,7 +37,6 @@ final class ListingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBinding()
-        setNavigationController()
         setupView()
         setupConstraints()
     }
@@ -47,26 +46,16 @@ final class ListingViewController: UIViewController {
         viewModel.fetchData(segmentedControlIndex: segmentedControl.selectedSegmentIndex)
     }
 
-    private func setNavigationController() {
-        self.title = "Idealista"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.backgroundColor = UIColor(red: 136.0/255.0,
-                                                                      green: 176.0/255.0,
-                                                                      blue: 75.0/255.0,
-                                                                      alpha: 1.0)
-    }
-
     private func setupView() {
+        self.title = "Idealista"
+
         tableView.frame = view.bounds
         tableView.dataSource = self
         tableView.delegate = self
 
         segmentedControl.addTarget(self, action: #selector(updateSegmentedControl), for: .valueChanged)
 
-        view.backgroundColor = UIColor(red: 136.0/255.0,
-                                       green: 176.0/255.0,
-                                       blue: 75.0/255.0,
-                                       alpha: 1.0)
+        view.backgroundColor = UI.Color.greenery
 
         segmentedControlView.addSubview(segmentedControl)
         [segmentedControlView, tableView].forEach(view.addSubview)
@@ -145,10 +134,5 @@ extension ListingViewController: ListingCellDelegate {
 private extension ListingViewController {
     enum Constants {
         static let cellIdentifier = "cell"
-
-        enum Font {
-            static let systemBold = "HelveticaNeue-Bold"
-            static let systemRegular = "HelveticaNeue"
-        }
     }
 }
