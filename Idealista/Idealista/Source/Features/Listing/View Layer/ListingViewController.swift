@@ -23,7 +23,9 @@ final class ListingViewController: UIViewController {
     }()
 
     private let segmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["Todos", "Favoritos"])
+        let segmentedControlTabs = [String(localized: "segmented_control_tab_0"),
+                                    String(localized: "segmented_control_tab_1")]
+        let segmentedControl = UISegmentedControl(items: segmentedControlTabs)
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
@@ -47,7 +49,7 @@ final class ListingViewController: UIViewController {
     }
 
     private func setupView() {
-        self.title = "Idealista"
+        self.title = String(localized: "title")
 
         tableView.frame = view.bounds
         tableView.dataSource = self
@@ -114,8 +116,8 @@ extension ListingViewController: UITableViewDataSource, UITableViewDelegate {
     private func updateEmptyView() {
         if listings.count == 0 {
             let emptyView = EmptyView()
-            emptyView.setupView(title: "No tienes ninguna propiedad guardada",
-                                subtitle: "¡Márcalas como favoritas para que no se te escapen!")
+            emptyView.setupView(title: String(localized: "empty_view_title"),
+                                subtitle: String(localized: "empty_view_subtitle"))
             tableView.backgroundView = emptyView
         } else {
             tableView.backgroundView = nil

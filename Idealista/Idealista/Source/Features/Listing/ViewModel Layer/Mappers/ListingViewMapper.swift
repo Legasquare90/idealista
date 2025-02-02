@@ -6,21 +6,41 @@ protocol ListingViewMapperProtocol {
 
 final class ListingViewMapper: ListingViewMapperProtocol {
     func map(input: PropertyDataEntity, favoriteIds: [String: Date]) -> PropertyViewEntity {
-        let location = "\(input.neighborhood), \(input.municipality)"
-        let price = Formatter.formatDoubleValue(input.priceInfo.price.amount) + " \(input.priceInfo.price.currencySuffix)"
-        let size = Formatter.formatDoubleValue(input.size) + " m2"
-        let rooms = "\(input.rooms) hab."
+        let location = String(format: String(localized: "property_location"),
+                              input.neighborhood,
+                              input.municipality)
+        let price = String(format: String(localized: "property_price"),
+                           Formatter.formatDoubleValue(input.priceInfo.price.amount),
+                           input.priceInfo.price.currencySuffix)
+        let size = String(format: String(localized: "property_size"),
+                          Formatter.formatDoubleValue(input.size))
+        let rooms = String(format: String(localized: "property_rooms"),
+                           input.rooms)
 
-        let exterior = input.exterior ? " exterior" : ""
+        let exterior = input.exterior ? String(localized: "characteristics_exterior") : ""
         let extraInfo = if input.floor == "0" {
-            "Bajo" + exterior
+            String(format: String(localized: "property_ground_floor"),
+                   exterior)
         } else {
-            "\(input.floor)ª planta" + exterior
+            String(format: String(localized: "property_floor"),
+                   Formatter.formatOrdinalNumber(input.floor),
+                   exterior)
         }
 
         var parkingInfo: String?
         if let parkingSpace = input.parkingSpace, parkingSpace.hasParkingSpace, parkingSpace.isParkingSpaceIncludedInPrice {
-            parkingInfo = "Garaje incluido"
+            parkingInfo = String(localized: "characteristics_parking_included")
+        }
+
+        let operation = PropertyViewEntity.Operation(rawValue: input.operation)
+        var operationText: String?
+        if let operation {
+            operationText = switch operation {
+            case .sale:
+                String(localized: "property_operation_sale").uppercased()
+            case .rent:
+                String(localized: "property_operation_rent").uppercased()
+            }
         }
 
         var isFavorite: Bool = false
@@ -39,7 +59,8 @@ final class ListingViewMapper: ListingViewMapperProtocol {
                      rooms: rooms,
                      extraInfo: extraInfo,
                      parkingInfo: parkingInfo,
-                     operation: .init(rawValue: input.operation),
+                     operation: operation,
+                     operationText: operationText,
                      isFavorite: isFavorite,
                      favoriteText: favoriteText)
     }

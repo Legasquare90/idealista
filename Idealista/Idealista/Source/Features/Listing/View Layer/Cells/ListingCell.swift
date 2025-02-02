@@ -183,11 +183,11 @@ final class ListingCell: UITableViewCell {
             case .sale:
                 tagView.setupView(backgroundColor: .purple,
                                   textColor: .white,
-                                  title: "Venta".uppercased())
+                                  title: viewModel.operationText)
             case .rent:
                 tagView.setupView(backgroundColor: .systemYellow,
                                   textColor: .black,
-                                  title: "Alquiler".uppercased())
+                                  title: viewModel.operationText)
             }
             tagView.isHidden = false
         } else {

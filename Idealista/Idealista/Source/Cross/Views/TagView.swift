@@ -7,7 +7,7 @@ final class TagView: UIView {
         return label
     }()
 
-    func setupView(backgroundColor: UIColor, textColor: UIColor, title: String) {
+    func setupView(backgroundColor: UIColor, textColor: UIColor, title: String?) {
         self.layer.cornerRadius = 12
         self.backgroundColor = backgroundColor
         titleLabel.textColor = textColor
