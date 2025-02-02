@@ -9,9 +9,9 @@ final class DetailViewMapper: DetailViewMapperProtocol {
         let images = input.multimedia.images.map { ImageDetailViewEntity(url: $0.url, localizedName: $0.localizedName) }
 
         return PropertyDetailViewEntity(propertyId: "",
-                                        address: "",
-                                        location: "",
-                                        price: "",
+                                        address: "Callejón Ordóñez, 3",
+                                        location: "Centro, Leganés",
+                                        price: "850 €/mes",
                                         parkingInfo: "",
                                         isFavorite: false,
                                         favoriteText: nil,

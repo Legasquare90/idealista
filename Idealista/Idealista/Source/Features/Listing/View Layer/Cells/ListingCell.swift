@@ -165,7 +165,7 @@ final class ListingCell: UITableViewCell {
         }
         titleLabel.text = viewModel.address
         subtitleLabel.text = viewModel.location
-        priceLabel.attributedText = getAttributedPriceText(viewModel.price)
+        priceLabel.attributedText = viewModel.price.getAttributedPriceText()
         sizeLabel.attributedText = getAttributedSizeText(viewModel.size)
         roomsLabel.text = viewModel.rooms
         floorLabel.text = viewModel.extraInfo
@@ -198,18 +198,6 @@ final class ListingCell: UITableViewCell {
         } else {
             favView.setupView(text: nil)
         }
-    }
-
-    private func getAttributedPriceText(_ text: String) -> NSAttributedString {
-        let sizeText = NSMutableAttributedString(string: text)
-        let currencyText = text.split(separator: " ").last ?? ""
-        var currencyRange = (text as NSString).range(of: String(currencyText))
-        currencyRange.location -= 1
-        currencyRange.length += 1
-        if let font = UIFont(name: UI.Font.systemBold, size: 14) {
-            sizeText.addAttribute(.font, value: font, range: currencyRange)
-        }
-        return sizeText
     }
 
     private func getAttributedSizeText(_ text: String) -> NSAttributedString {

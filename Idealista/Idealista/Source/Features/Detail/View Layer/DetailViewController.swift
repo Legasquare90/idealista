@@ -38,6 +38,8 @@ final class DetailViewController: UIViewController {
         return label
     }()
 
+    private let basicDataView = PropertyBasicDataView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBinding()
@@ -54,12 +56,13 @@ final class DetailViewController: UIViewController {
         view.backgroundColor = UI.Color.greenery
         self.title = "Detail"
 
-        [collectionView, counterLabel].forEach(view.addSubview)
+        [collectionView, counterLabel, basicDataView].forEach(view.addSubview)
     }
 
     private func setupConstraints() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         counterLabel.translatesAutoresizingMaskIntoConstraints = false
+        basicDataView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -71,6 +74,10 @@ final class DetailViewController: UIViewController {
             counterLabel.heightAnchor.constraint(equalToConstant: 25),
             counterLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             counterLabel.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -16),
+
+            basicDataView.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            basicDataView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            basicDataView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
 
@@ -81,8 +88,11 @@ final class DetailViewController: UIViewController {
     }
 
     private func renderView() {
+        guard let propertyDetail else { return }
+
         collectionView.reloadData()
         updateCounter()
+        basicDataView.configureView(viewModel: propertyDetail)
     }
 
     private func updateCounter() {
