@@ -17,4 +17,8 @@ enum UI {
         static let heart = UIImage(named: "heart")
         static let heartFilled = UIImage(named: "heartFilled")
     }
+
+    enum Size {
+        static let propertyImage: CGFloat = 240
+    }
 }

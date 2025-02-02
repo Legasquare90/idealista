@@ -2,7 +2,7 @@ import Combine
 import Foundation
 
 final class DetailViewModel {
-    @Published var detailProperty: PropertyDetailViewEntity?
+    @Published var propertyDetail: PropertyDetailViewEntity?
 
     var cancellables = Set<AnyCancellable>()
 
@@ -21,11 +21,11 @@ final class DetailViewModel {
     }
 
     @MainActor
-    func fetchData(segmentedControlIndex: Int) {
+    func fetchData() {
         Task {
             do {
                 let data = try await model.fetchDetail()
-                self.detailProperty = mapper.map(input: data)
+                self.propertyDetail = mapper.map(input: data)
             } catch {
                 print(error.localizedDescription)
             }

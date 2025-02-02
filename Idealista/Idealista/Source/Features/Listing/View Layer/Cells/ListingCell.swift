@@ -11,7 +11,6 @@ final class ListingCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .lightGray
         return imageView
     }()
 
@@ -152,7 +151,7 @@ final class ListingCell: UITableViewCell {
             contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 240),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: UI.Size.propertyImage),
             tagView.topAnchor.constraint(equalTo: thumbnailImageView.topAnchor, constant: 12),
             tagView.leadingAnchor.constraint(equalTo: thumbnailImageView.leadingAnchor, constant: 12),
             favView.topAnchor.constraint(equalTo: addressStackView.topAnchor),

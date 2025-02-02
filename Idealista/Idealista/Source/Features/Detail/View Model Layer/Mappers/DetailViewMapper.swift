@@ -6,6 +6,31 @@ protocol DetailViewMapperProtocol {
 
 final class DetailViewMapper: DetailViewMapperProtocol {
     func map(input: PropertyDetailDataEntity) -> PropertyDetailViewEntity {
-        PropertyDetailViewEntity()
+        let images = input.multimedia.images.map { ImageDetailViewEntity(url: $0.url, localizedName: $0.localizedName) }
+
+        return PropertyDetailViewEntity(propertyId: "",
+                                        address: "",
+                                        location: "",
+                                        price: "",
+                                        parkingInfo: "",
+                                        isFavorite: false,
+                                        favoriteText: nil,
+                                        images: images,
+                                        description: "",
+                                        rooms: "",
+                                        bathrooms: "",
+                                        exterior: "",
+                                        furnitures: "",
+                                        size: "",
+                                        lift: "",
+                                        boxroom: "",
+                                        floor: "",
+                                        state: "",
+                                        energyCertification: .init(title: "",
+                                                                   energyConsumption: "",
+                                                                   emissions: ""),
+                                        lastUpdated: "",
+                                        ubication: .init(latitude: 0,
+                                                         longitude: 0))
     }
 }
