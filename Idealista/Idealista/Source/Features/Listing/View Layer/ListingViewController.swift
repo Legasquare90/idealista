@@ -23,23 +23,16 @@ final class ListingViewController: UIViewController {
     }()
 
     private let segmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["Todos", "Favoritos"])
+        let segmentedControlTabs = [String(localized: "segmented_control_tab_0"),
+                                    String(localized: "segmented_control_tab_1")]
+        let segmentedControl = UISegmentedControl(items: segmentedControlTabs)
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemBold, size: 18)
-        label.text = "Idealista"
-        label.textAlignment = .center
-        return label
-    }()
-
-    private let header: UIView = {
+    private let segmentedControlView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 136.0/255.0, green: 176.0/255.0, blue: 75.0/255.0, alpha: 1.0)
+        view.backgroundColor = .white
         return view
     }()
 
@@ -56,41 +49,39 @@ final class ListingViewController: UIViewController {
     }
 
     private func setupView() {
+        self.title = String(localized: "title")
+
         tableView.frame = view.bounds
         tableView.dataSource = self
         tableView.delegate = self
 
         segmentedControl.addTarget(self, action: #selector(updateSegmentedControl), for: .valueChanged)
 
-        view.backgroundColor = .white
+        view.backgroundColor = UI.Color.greenery
 
-        header.addSubview(titleLabel)
-        [header, segmentedControl, tableView].forEach(view.addSubview)
+        segmentedControlView.addSubview(segmentedControl)
+        [segmentedControlView, tableView].forEach(view.addSubview)
     }
 
     private func setupConstraints() {
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        header.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControlView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: header.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: header.topAnchor, constant: 16),
-            titleLabel.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: -16),
+            segmentedControlView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            segmentedControlView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            segmentedControlView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            segmentedControlView.bottomAnchor.constraint(equalTo: tableView.topAnchor),
 
-            header.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            header.bottomAnchor.constraint(equalTo: segmentedControl.topAnchor, constant: -8),
-
-            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            segmentedControl.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -8),
+            segmentedControl.topAnchor.constraint(equalTo: segmentedControlView.topAnchor, constant: 8),
+            segmentedControl.leadingAnchor.constraint(equalTo: segmentedControlView.leadingAnchor, constant: 16),
+            segmentedControl.trailingAnchor.constraint(equalTo: segmentedControlView.trailingAnchor, constant: -16),
+            segmentedControl.bottomAnchor.constraint(equalTo: segmentedControlView.bottomAnchor, constant: -8),
 
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
@@ -125,8 +116,8 @@ extension ListingViewController: UITableViewDataSource, UITableViewDelegate {
     private func updateEmptyView() {
         if listings.count == 0 {
             let emptyView = EmptyView()
-            emptyView.setupView(title: "No tienes ninguna propiedad guardada",
-                                subtitle: "¡Márcalas como favoritas para que no se te escapen!")
+            emptyView.setupView(title: String(localized: "empty_view_title"),
+                                subtitle: String(localized: "empty_view_subtitle"))
             tableView.backgroundView = emptyView
         } else {
             tableView.backgroundView = nil
@@ -145,10 +136,5 @@ extension ListingViewController: ListingCellDelegate {
 private extension ListingViewController {
     enum Constants {
         static let cellIdentifier = "cell"
-
-        enum Font {
-            static let systemBold = "HelveticaNeue-Bold"
-            static let systemRegular = "HelveticaNeue"
-        }
     }
 }

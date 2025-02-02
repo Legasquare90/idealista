@@ -9,8 +9,6 @@ protocol ListingModelProtocol {
 }
 
 final class ListingModel: ListingModelProtocol {
-    private let cacheKey = "listingModelApiResponse"
-
     private let service: ListingServiceProtocol
     private let store: ListingStoreProtocol
     private let cacheManager: CacheManager
@@ -30,7 +28,7 @@ final class ListingModel: ListingModelProtocol {
     }
 
     func fetchListings(forceUpdate: Bool) async throws -> [PropertyDataEntity] {
-        if !forceUpdate, let cachedData = cacheManager.getData(forKey: cacheKey) {
+        if !forceUpdate, let cachedData = cacheManager.getData(forKey: Constants.cacheKey) {
             return try JSONDecoder().decode([PropertyDataEntity].self, from: cachedData)
         } else {
             do {
@@ -76,5 +74,11 @@ final class ListingModel: ListingModelProtocol {
         store.removeFavoriteProperty(propertyId: propertyId) {
             completion($0)
         }
+    }
+}
+
+private extension ListingModel {
+    enum Constants {
+        static let cacheKey = "listingModelApiResponse"
     }
 }

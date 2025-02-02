@@ -4,7 +4,7 @@ final class FavView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.font = UIFont(name: Constants.Font.systemRegular, size: 10)
+        label.font = UIFont(name: UI.Font.systemRegular, size: 10)
         label.numberOfLines = 2
         label.textAlignment = .center
         return label
@@ -27,7 +27,7 @@ final class FavView: UIView {
 
     func setupView(text: String?) {
         self.layer.cornerRadius = 8
-        self.backgroundColor = UIColor(red: 136.0/255.0, green: 176.0/255.0, blue: 75.0/255.0, alpha: 1.0)
+        self.backgroundColor = UI.Color.greenery
 
         [titleLabel, favImageView].forEach(stackView.addArrangedSubview)
         addSubview(stackView)
@@ -35,10 +35,10 @@ final class FavView: UIView {
         if let text {
             titleLabel.text = text
             titleLabel.isHidden = false
-            favImageView.image = UIImage(named: "heartFilled")?.withTintColor(.red)
+            favImageView.image = UI.Image.heartFilled?.withTintColor(.red)
         } else {
             titleLabel.isHidden = true
-            favImageView.image = UIImage(named: "heart")
+            favImageView.image = UI.Image.heart
         }
 
         setupConstraints()
@@ -56,14 +56,5 @@ final class FavView: UIView {
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8)
         ])
-    }
-}
-
-private extension FavView {
-    enum Constants {
-        enum Font {
-            static let systemBold = "HelveticaNeue-Bold"
-            static let systemRegular = "HelveticaNeue"
-        }
     }
 }

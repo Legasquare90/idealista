@@ -2,6 +2,7 @@ import Foundation
 
 extension Date {
     func createFavoriteText() -> String {
-        "Te gusta desde\n\(Formatter.formatDate(self))"
+        String(format: String(localized: "favorite"),
+               Formatter.formatDate(self))
     }
 }
